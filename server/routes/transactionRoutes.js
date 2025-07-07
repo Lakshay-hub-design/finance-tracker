@@ -1,10 +1,18 @@
-// backend/routes/transactionRoutes.js
 const express = require("express");
 const router = express.Router();
+const {
+  addTransaction,
+  getTransactions,
+  deleteTransaction,
+  updateTransaction,
+} = require("../controllers/transactionController");
 
-// @route POST /api/transactions
-// @route GET /api/transactions
-// @route PUT /api/transactions/:id
-// @route DELETE /api/transactions/:id
+const { protect } = require("../middleware/authMiddleware");
+
+// All routes below are protected
+router.post("/", protect, addTransaction);
+router.get("/", protect, getTransactions);
+router.delete("/:id", protect, deleteTransaction);
+router.put("/:id", protect, updateTransaction);
 
 module.exports = router;
