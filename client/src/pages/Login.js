@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import FormWrapper from "../components/FormWrapper";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -18,7 +19,9 @@ function Login() {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:5000/api/users/login", form);
-      login(res.data.token);
+      const { token, name, email } = res.data;
+      login(token, { name, email });
+      localStorage.setItem("userName", name);
       navigate("/dashboard");
     } catch (error) {
       alert(error.response?.data?.message || "Login failed");
@@ -45,8 +48,16 @@ function Login() {
           style={inputStyle}
           required
         />
-        <button type="submit" style={buttonStyle}>Login</button>
+        <button type="submit" style={buttonStyle}>
+          Login
+        </button>
       </form>
+      <p style={{ textAlign: "center", marginTop: "10px" }}>
+        Don’t have an account?{" "}
+        <Link to="/register" style={linkStyle}>
+          Register
+        </Link>
+      </p>
     </FormWrapper>
   );
 }
@@ -71,5 +82,12 @@ const buttonStyle = {
   cursor: "pointer",
   marginTop: "10px",
 };
+
+const linkStyle = {
+  color: "rgb(224, 83, 31)",
+  textDecoration: "none",
+  fontWeight: "bold",
+};
+
 
 export default Login;

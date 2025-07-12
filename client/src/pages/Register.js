@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import FormWrapper from "../components/FormWrapper";
+import { Link } from "react-router-dom";
 
 function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -19,6 +20,7 @@ function Register() {
     try {
       const res = await axios.post("http://localhost:5000/api/users/register", form);
       login(res.data.token);
+      localStorage.setItem("userName", form.name);
       navigate("/dashboard");
     } catch (error) {
       alert(error.response?.data?.message || "Registration failed");
@@ -53,8 +55,16 @@ function Register() {
           style={inputStyle}
           required
         />
-        <button type="submit" style={buttonStyle}>Register</button>
+        <button type="submit" style={buttonStyle}>
+          Register
+        </button>
       </form>
+      <p style={{ textAlign: "center", marginTop: "10px" }}>
+        Already have an account?{" "}
+        <Link to="/login" style={linkStyle}>
+          Login
+        </Link>
+      </p>
     </FormWrapper>
   );
 }
@@ -79,5 +89,12 @@ const buttonStyle = {
   cursor: "pointer",
   marginTop: "10px",
 };
+
+const linkStyle = {
+  color: "rgb(224, 83, 31)",
+  textDecoration: "none",
+  fontWeight: "bold",
+};
+
 
 export default Register;
