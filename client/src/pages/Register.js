@@ -1,10 +1,13 @@
 // src/pages/Register.js
 import React, { useState, useContext } from "react";
 import axios from "axios";
+import '../index.css'
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import FormWrapper from "../components/FormWrapper";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -17,18 +20,27 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(form.email)) {
+        toast.error("Please enter a valid email address");
+        return;
+      }
     try {
       const res = await axios.post("http://localhost:5000/api/users/register", form);
       login(res.data.token);
       localStorage.setItem("userName", form.name);
-      navigate("/dashboard");
+      toast.success("Registration successful!", { autoClose: 2000 });
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
     } catch (error) {
-      alert(error.response?.data?.message || "Registration failed");
+      toast.error(error.response?.data?.message || "Registration failed");
     }
   };
 
   return (
     <FormWrapper title="Register">
+      <ToastContainer position="top-right" autoClose={3000} />
       <form onSubmit={handleSubmit}>
         <input
           name="name"
@@ -41,6 +53,7 @@ function Register() {
         <input
           name="email"
           placeholder="Email"
+          type="email"
           value={form.email}
           onChange={handleChange}
           style={inputStyle}
@@ -95,6 +108,5 @@ const linkStyle = {
   textDecoration: "none",
   fontWeight: "bold",
 };
-
 
 export default Register;
