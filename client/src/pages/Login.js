@@ -5,28 +5,34 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import FormWrapper from "../components/FormWrapper";
 import { Link } from "react-router-dom";
+import { ThemeContext } from "../context/ThemeContext";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+  const { setUser } = useContext(ThemeContext);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:5000/api/users/login", form);
-      const { token, name, email } = res.data;
-      login(token, { name, email });
-      localStorage.setItem("userName", name);
-      navigate("/dashboard");
-    } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post("http://localhost:5000/api/users/login", form);
+const { token, name, email } = res.data;
+login(token, { name, email });
+localStorage.setItem("userName", name);
+localStorage.setItem("email", email);
+setUser(email);
+navigate("/dashboard");                           
+
+    navigate("/dashboard");
+  } catch (error) {
+    alert(error.response?.data?.message || "Login failed");
+  }
+};
 
   return (
     <FormWrapper title="Login">
