@@ -41,7 +41,7 @@ const handleSubmit = async (e) => {
   }
 
   try {
-    const res = await axios.post("http://localhost:5000/api/users/register", form);
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/register`, form);
     login(res.data.token);
     localStorage.setItem("userName", form.name);
     toast.success("Registration successful!", { autoClose: 2000 });

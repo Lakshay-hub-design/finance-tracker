@@ -46,7 +46,7 @@ function Dashboard() {
   // API functions
   const fetchTransactions = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/transactions", {
+      const res = await axios.get(`${process.env.REACT_APP_API_UR}/transactions`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTransactions(res.data);
@@ -60,14 +60,14 @@ function Dashboard() {
     try {
       if (editingId) {
         await axios.put(
-          `http://localhost:5000/api/transactions/${editingId}`,
+          `${process.env.REACT_APP_API_UR}/transactions/${editingId}`,
           form,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.success("Transaction updated!");
         setEditingId(null);
       } else {
-        await axios.post("http://localhost:5000/api/transactions", form, {
+        await axios.post(`${process.env.REACT_APP_API_UR}/transactions`, form, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Transaction added!");
@@ -89,7 +89,7 @@ function Dashboard() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/transactions/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_API_UR}/transactions/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.info("Transaction deleted");
