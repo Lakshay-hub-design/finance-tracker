@@ -18,30 +18,46 @@ function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(form.email)) {
-        toast.error("Please enter a valid email address");
-        return;
-      }
-    try {
-      const res = await axios.post("http://localhost:5000/api/users/register", form);
-      login(res.data.token);
-      localStorage.setItem("userName", form.name);
-      toast.success("Registration successful!", { autoClose: 2000 });
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Registration failed");
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const nameRegex = /^[A-Za-z ]{3,}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+  if (!nameRegex.test(form.name)) {
+    toast.error("Name should only contain letters and spaces");
+    return;
+  }
+
+  if (!emailRegex.test(form.email)) {
+    toast.error("Please enter a valid email address");
+    return;
+  }
+
+  if (!passwordRegex.test(form.password)) {
+    toast.error("Password must be at least 6 characters and include uppercase, lowercase, number, and special character");
+    return;
+  }
+
+  try {
+    const res = await axios.post("http://localhost:5000/api/users/register", form);
+    login(res.data.token);
+    localStorage.setItem("userName", form.name);
+    toast.success("Registration successful!", { autoClose: 2000 });
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 2000);
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Registration failed");
+  }
+};
+
 
   return (
     <FormWrapper title="Register">
       <ToastContainer position="top-right" autoClose={3000} />
-      <form onSubmit={handleSubmit}>
+      <form autoComplete="off" onSubmit={handleSubmit}>
         <input
           name="name"
           placeholder="Name"
