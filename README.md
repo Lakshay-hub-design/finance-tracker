@@ -26,7 +26,10 @@ A simple and powerful personal finance tracker built using the MERN stack (Mongo
 cd server
 npm install
 npm run dev
+```
+### Frontend:
 
+```bash
 cd client
 npm install
 npm start
