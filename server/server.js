@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-  "https://finance-tracker-lemon-six.vercel.app",
+  "https://finance-tracker-api-p96c.onrender.com/api",
   "http://localhost:3000"
 ];
 
