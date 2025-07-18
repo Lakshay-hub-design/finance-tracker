@@ -24,7 +24,11 @@ function Dashboard() {
   const [form, setForm] = useState({ title: "", amount: "", type: "income" });
   const [editingId, setEditingId] = useState(null);
   const [filter, setFilter] = useState("all");
-  const [budget, setBudget] = useState(() => localStorage.getItem("budget") || "");
+  const [budget, setBudget] = useState(() => {
+    const email = localStorage.getItem("email") || "";
+    return localStorage.getItem(`budget_${email}`) || "";
+  });
+
 
   // Window resize handler
   useEffect(() => {
@@ -83,9 +87,18 @@ function Dashboard() {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
   const handleBudgetChange = (e) => {
     const value = e.target.value;
+    const email = localStorage.getItem("email") || "";
     setBudget(value);
-    localStorage.setItem("budget", value);
+    localStorage.setItem(`budget_${email}`, value);
   };
+
+  useEffect(() => {
+    const email = localStorage.getItem("email") || "";
+    const savedBudget = localStorage.getItem(`budget_${email}`);
+    if (savedBudget) {
+      setBudget(savedBudget);
+    }
+  }, []);
 
   const handleDelete = async (id) => {
     try {
