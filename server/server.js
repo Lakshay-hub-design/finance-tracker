@@ -10,8 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-  "https://finance-tracker-api-p96c.onrender.com/api",
-  "http://localhost:3000"
+  "https://finance-tracker-virid-chi.vercel.app", // ✅ Your deployed frontend
+  "http://localhost:3000" // ✅ For local frontend testing
 ];
 
 app.use(
@@ -27,6 +27,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE"]
   })
 );
+
 
 app.use(helmet());
 app.use(express.json());

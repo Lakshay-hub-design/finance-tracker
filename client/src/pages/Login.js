@@ -30,7 +30,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/login`, form);
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/users/login`, form);
       const { token, name, email } = res.data;
       login(token, { name, email });
       localStorage.setItem("userName", name);
